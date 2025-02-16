@@ -32,10 +32,27 @@ namespace DevSpot
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //Creating the ADMIN Role
+            using (var scope= app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var roleManager= services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                //We check if this role hasnt been created.
+                //We want to avoid to create an admin role each time we run our application.
+                if (!roleManager.RoleExistsAsync("Admin").Result)
+                {
+                    //Cehck asp.net roles db
+                    var result = roleManager.CreateAsync(new IdentityRole("Admin")).Result;
+                }
+            }
+
+                app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapRazorPages();
 
             app.MapStaticAssets();
             app.MapControllerRoute(
