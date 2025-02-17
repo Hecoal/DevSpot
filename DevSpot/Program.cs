@@ -1,3 +1,4 @@
+using DevSpot.Constants;
 using DevSpot.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,15 +37,19 @@ namespace DevSpot
             using (var scope= app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var roleManager= services.GetRequiredService<RoleManager<IdentityRole>>();
+                RoleSeeder.SeedRolesAsync(services).Wait();
+
+                //These lines has been aded to Role Seeder.cs
+                //var roleManager= services.GetRequiredService<RoleManager<IdentityRole>>();
 
                 //We check if this role hasnt been created.
                 //We want to avoid to create an admin role each time we run our application.
-                if (!roleManager.RoleExistsAsync("Admin").Result)
+                /*
+                if (!roleManager.RoleExistsAsync(Roles.Admin).Result)
                 {
                     //Cehck asp.net roles db
-                    var result = roleManager.CreateAsync(new IdentityRole("Admin")).Result;
-                }
+                    var result = roleManager.CreateAsync(new IdentityRole(Roles.Admin)).Result;
+                }*/
             }
 
                 app.UseHttpsRedirection();
