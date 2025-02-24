@@ -50,6 +50,9 @@ namespace DevSpot
                     //Cehck asp.net roles db
                     var result = roleManager.CreateAsync(new IdentityRole(Roles.Admin)).Result;
                 }*/
+
+                //Creamos un usuario con su rol
+                UserSeeder.SeedUserAsync(services).Wait();
             }
 
                 app.UseHttpsRedirection();
